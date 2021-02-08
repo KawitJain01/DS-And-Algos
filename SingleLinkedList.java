@@ -6,6 +6,8 @@ public class SingleLinkedList<E> {
 
 	private Node<E> last;
 
+	private int length;
+
 	private static class Node<E> {
 		private E data;
 
@@ -36,6 +38,7 @@ public class SingleLinkedList<E> {
 
 	public void add(E element) {
 		addLast(element);
+		length++;
 	}
 
 	public void addFirst(E element) {
@@ -44,6 +47,7 @@ public class SingleLinkedList<E> {
 			Node<E> newNode = new Node<>(element);
 			newNode.next = oldHead;
 			head = newNode;
+			length++;
 		}
 	}
 
@@ -73,24 +77,23 @@ public class SingleLinkedList<E> {
 
 		if (head.data.equals(element)) {
 			head = head.next;
+			length--;
 			result = true;
-		} 
-		else {
-			
+		} else {
+
 			Node<E> current = head.next;
 			Node<E> prev = head;
 			Node<E> next = null;
-			
+
 			while (isNotNull(current)) {
 				if (current.data.equals(element)) {
-                    next = current.next;
-                    current.next = null;
-                    prev.next = next;
-                    result = true;
-                    break;
-				}
-				else
-				{
+					next = current.next;
+					current.next = null;
+					prev.next = next;
+					result = true;
+					length--;
+					break;
+				} else {
 					prev = current;
 					current = current.next;
 				}
@@ -100,11 +103,36 @@ public class SingleLinkedList<E> {
 		return result;
 	}
 
-	public void clear()
-	{
+	public void clear() {
 		head = null;
+		length = 0;
 	}
-	
+
+	public E getElementFromLast(int elementNo) {
+		return elementNo > length ? null : get( length - elementNo );
+	}
+
+	public E getElementFromFirst(int elementNo) {
+		return get( elementNo - 1 );
+	}
+
+	private E get(int no) {
+		if (head == null) {
+			return null;
+		}
+
+		Node<E> current = head;
+
+		for (int i = 1; i <= no; i++) {
+			current = current.next;
+		}
+		return current != null ? current.data : null;
+	}
+
+	public int count() {
+		return length;
+	}
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("[");
@@ -130,23 +158,38 @@ public class SingleLinkedList<E> {
 		sl.reverse();
 
 		System.out.println(sl);
-		
+
 		sl.clear();
-		
+
 		System.out.println(sl);
-		
+
 		sl.add(1);
 		sl.add(2);
 		sl.add(3);
 		sl.add(4);
 		sl.add(5);
 		sl.add(6);
-		
+
 		System.out.println(sl);
-		
+
 		sl.remove(1);
-		
+
 		System.out.println(sl);
-		
+
+		sl.clear();
+
+		sl.add(1);
+		sl.add(2);
+		sl.add(3);
+		sl.add(4);
+		sl.add(5);
+
+		Integer ele = sl.getElementFromLast(6);
+
+		System.out.println(ele);
+
+		ele = sl.getElementFromFirst(6);
+
+		System.out.println(ele);
 	}
 }
